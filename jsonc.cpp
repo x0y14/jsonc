@@ -56,15 +56,9 @@ int main(int argc, char *argv[]) {
 
 	vector<jsonc::Token> tokens = jsonc::lex(json_body);
 	string out;
-	int c = 0;
 	for (jsonc::Token& t: tokens) {
-		out += t.to_string();
-		c++;
-		if (c != tokens.size() - 1) {
-			out += " ";
-		}
+		cout << t.to_string() << endl;
 	}
-	cout << out << endl;
 
 	return 0;
 }
