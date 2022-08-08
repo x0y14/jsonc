@@ -8,7 +8,7 @@ clean:
 test:
 	g++ -std=c++20 -o bin/test test.cpp
 	bin/test
-	@echo OK
+	@echo TEST OK
 
 
 .PHONY: test
