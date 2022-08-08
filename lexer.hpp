@@ -8,6 +8,7 @@ namespace jsonc {
     char curt();
     void go_next();
     bool is_eof();
+    bool is_ws();
 
     void t_json();
     void t_value();
@@ -31,6 +32,7 @@ namespace jsonc {
     void t_exponent();
     void t_sign();
     void t_ws();
+    void t_keyword();
 
     std::vector<jsonc::Token> lex(std::string);
 }
