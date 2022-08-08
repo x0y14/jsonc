@@ -18,6 +18,8 @@ struct test_case
         auto tokens = jsonc::lex(input);
         if (tokens.size() != expected.size()) {
             cout << "vector size is not matched" << endl;
+            cout << "tokens.size() => " << tokens.size() << endl;
+            cout << "expected.size() => " << expected.size() << endl;
             exit(1);
         }
 
@@ -60,12 +62,33 @@ namespace test_lexer {
         };
         case_.lex();
     }
+
+    void kv_str1() {
+        // {      (1)  0 <= x < 1
+        // "key"  (5)  1 <= x < 6
+        // :      (1)  6 <= x < 7
+        // "value"(7)  7 <= x < 14
+        // }      (1) 14 <= x < 15
+        test_case case_ = {
+            "kv_str1",
+            R"({"key":"value"})",
+            {
+                "{0:1 TLCUB `{`}",
+                "{1:6 TSTRING `key`}",
+                "{6:7 TCOLON `:`}",
+                "{7:14 TSTRING `value`}",
+                "{14:15 TRCUB `}`}",
+            }
+        };
+        case_.lex();
+    }
 }
 
 
 int main(int argc, char *argv[]) {
     test_lexer::empty_cub();
     test_lexer::only_white();
+    test_lexer::kv_str1();
 
     return 0;
 }
