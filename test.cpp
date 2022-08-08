@@ -16,6 +16,11 @@ struct test_case
         cout << "input: `" << input << "`" << endl;
         
         auto tokens = jsonc::lex(input);
+        if (tokens.size() != expected.size()) {
+            cout << "vector size is not matched" << endl;
+            exit(1);
+        }
+
         int c = 0;
         for (auto token: tokens) {
             bool ok = str_assert(expected[c], token.to_string());
