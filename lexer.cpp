@@ -1,7 +1,5 @@
+#include "lexer.hpp"
 #include <iostream>
-#include <string>
-#include <vector>
-#include "token.cpp"
 
 using std::string;
 using std::cout;
@@ -33,7 +31,7 @@ bool is_eof() {
 }
 
 // 現在のキャラクタが空白、改行である間削除し続けます
-void t_white() {
+void t_ws() {
     jsonc::Token token;
     token.kind = TWHITE;
     token.s_pos = pos;
@@ -57,6 +55,29 @@ void t_white() {
     tokens.push_back(token);
 }
 
+void t_member() {
+    t_ws();
+    t_string();
+    t_ws();
+
+    //
+    jsonc::Token colon = {.s_pos=pos, .e_pos=pos+1, .data=":", .kind=TCOLON};
+    tokens.push_back(colon);
+    go_next();
+
+    t_element();
+}
+
+void t_members() {
+    t_member();
+    if (curt() == ',') {
+        jsonc::Token commma = {.s_pos=pos, .e_pos=pos+1, .data=",", .kind=TCOMMMA};
+        tokens.push_back(commma);
+        go_next();  
+        t_members();
+    }
+}
+
 void t_object() {
     // cout << "t_object" << endl;
 
@@ -71,10 +92,10 @@ void t_object() {
     t_lcub.e_pos = pos;
     tokens.push_back(t_lcub);
     
-    t_white();
+    t_ws();
 
     if (curt() != '}') {
-        // members
+        t_members();
     }
 
     jsonc::Token t_rcub;
@@ -121,7 +142,7 @@ void t_value() {
 void t_element() {
     // cout << "t_element" << endl;
 
-    t_white();
+    t_ws();
     if (is_eof()) {
         return;
     }
@@ -129,7 +150,7 @@ void t_element() {
      if (is_eof()) {
         return;
     }
-    t_white();
+    t_ws();
 }
 
 void t_json() {
