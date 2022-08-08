@@ -27,6 +27,7 @@ struct test_case
             }
             c++;
         }
+        cout << endl;
     }
 };
 
@@ -59,7 +60,6 @@ namespace test_lexer {
 
 int main(int argc, char *argv[]) {
     test_lexer::empty_cub();
-    cout << endl;
     test_lexer::only_white();
 
     return 0;
